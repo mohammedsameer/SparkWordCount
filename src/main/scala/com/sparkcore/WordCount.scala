@@ -1,14 +1,13 @@
-/**
- * Spark main point of entry
- */
+package com.sparkcore
 
 import org.apache.spark.{SparkConf, SparkContext}
+
 
 object WordCount {
 
   def main (args: Array[String]) {
 
-    val conf = new SparkConf().setAppName("WordCount").setMaster("local")
+    val conf = new SparkConf().setAppName("WordCountSpark").setMaster("local")
     val sc = new SparkContext(conf)
 
     if(args.length < 1) {
@@ -22,10 +21,10 @@ object WordCount {
     val words = textFile.flatMap(line => line.split(" "))
 
     //Create a word tuple i.e. (word, 1)
-    val counts = words.map(word => (word, 1))
+    val wordTuple = words.map(word => (word, 1))
 
     //Reduce by word key
-    val wordCount = counts.reduceByKey((a,b) => (a+b))
+    val wordCount = wordTuple.reduceByKey((a,b) => (a+b))
 
     //Sort word counts
     val wordCountSorted = wordCount.sortByKey()
